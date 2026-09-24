@@ -1,0 +1,38 @@
+{
+  "leeway_header": {
+    "region": "DATA",
+    "tag": "DATA.FEDERATE.BOOTSTRAP",
+    "authority": "LeeWay-Standards",
+    "what": "Public bootstrap descriptor",
+    "why": "Let clients locate federation metadata without making GitHub authority",
+    "who": "Leeway Industries / Agent Lee",
+    "where": "bootstrap.json",
+    "when": "2026-09-24",
+    "how": "Static signed-ready descriptor",
+    "license": "PROPRIETARY"
+  },
+  "schema": "leeway.federate.bootstrap.v1",
+  "network": "Leeway-Federate-Web",
+  "authority": "LeeWay-Standards",
+  "bootstrap_is_authority": false,
+  "service_namespace": "lee://",
+  "preferred_node_classes": [
+    "LW-WEB",
+    "LW-EDGE",
+    "LW-FED"
+  ],
+  "policy": {
+    "discover": "broad",
+    "attach": "explicitly-authorized-only",
+    "layer2_merge": false
+  },
+  "manifests": [
+    "./ecosystem.manifest.json"
+  ],
+  "capability_state": {
+    "browser_runtime": "IMPLEMENTED",
+    "live_peer_federation": "UNVERIFIED",
+    "formula_network_optimization": "UNVERIFIED",
+    "zero_owned_hardware_survival": "UNVERIFIED"
+  }
+}
