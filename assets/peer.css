@@ -1,0 +1,22 @@
+/* LEEWAY HEADER — DO NOT REMOVE
+REGION: UI
+TAG: UI.FEDERATE.PEER.STYLES
+AUTHORITY: LeeWay-Standards
+AUTHORIZED_ROLES: Creator; Agent Lee within approved browser transport scope
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
+5WH:
+WHAT = Manual peer connection proof surface
+WHY = Exercise real browser data transport with explicit peer consent
+WHO = Leeway Industries / Agent Lee System Engineer
+WHERE = assets/peer.css
+WHEN = 2026-09-24
+HOW = Native browser WebRTC and WebCrypto; no hosted signaling or ICE services
+CHAIN: Standards → Integrated → Runtime → Projections
+LICENSE: PROPRIETARY (see LICENSE.md) */
+.peer-hero{padding-top:30px}.peer-hero h1{font-size:clamp(2rem,5vw,4rem)}
+a{color:#a8ffe6}label{display:block;font-weight:650;margin:16px 0 8px}
+input:not([type=checkbox]),textarea{width:100%;min-width:0;background:#050d13;color:#eaf3f8;border:1px solid #3c5665;border-radius:9px;padding:12px;font:inherit;resize:vertical}
+textarea{font-family:ui-monospace,monospace;font-size:.85rem;overflow-wrap:anywhere}.button-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button:disabled{opacity:.4;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffd58c;outline-offset:3px}
+.consent{display:flex;align-items:flex-start;gap:10px;font-weight:400}.consent input{width:20px;min-width:20px;height:20px}
+.error{border-color:#eea069;color:#ffd7b7}.peer-hero .status-row{justify-content:flex-start}#messages{padding-left:22px;overflow-wrap:anywhere}#peer-id{min-height:65px}#inspection{overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere}

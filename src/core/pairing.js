@@ -1,0 +1,56 @@
+/*
+LEEWAY HEADER — DO NOT REMOVE
+REGION: CORE
+TAG: CORE.FEDERATE.PAIRING
+AUTHORITY: LeeWay-Standards
+AUTHORIZED_ROLES: Creator; Agent Lee under Creator-approved scope
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
+5WH:
+WHAT = Validate signed, expiring manual offer/answer packages
+WHY = Prove the bounded browser-to-browser transport gate without duplicating Runtime Fabric
+WHO = Leeway Industries / Agent Lee System Engineer
+WHERE = src/core/pairing.js
+WHEN = 2026-09-24
+HOW = WebCrypto signature checks; exact peer pin; explicit consent before WebRTC attachment
+CHAIN: Standards → Integrated → Runtime → Projections
+LICENSE: PROPRIETARY (see LICENSE.md)
+*/
+
+import {sha256Hex,toBase64URL,fromBase64URL} from './identity.js';
+export const PROTOCOL='leeway.manual-peer.v1';
+export const TTL_MS=600000;
+const encode=s=>new TextEncoder().encode(s);
+const FIELDS=['protocol','type','session','issuedAt','expiresAt','from','to','offerHash','publicKey','sdp'];
+export function canonicalPayload(p) { return JSON.stringify(Object.fromEntries(FIELDS.map(k=>[k,p[k]]))); }
+export async function signPairing(identity, fields, now=Date.now()) {
+  const payload={protocol:PROTOCOL,type:fields.type,session:fields.session,issuedAt:now,expiresAt:now+TTL_MS,
+    from:identity.id,to:fields.to??null,offerHash:fields.offerHash??null,publicKey:identity.publicKey,sdp:fields.sdp};
+  const bytes=encode(canonicalPayload(payload));
+  return {text:JSON.stringify({payload,signature:await identity.sign(bytes)}),hash:await sha256Hex(bytes),payload};
+}
+export async function inspectPairing(text, now=Date.now()) {
+  if(typeof text!=='string'||encode(text).length>65536)throw new Error('Pairing package must be text, at most 64 KiB');
+  let obj;try{obj=JSON.parse(text)}catch{throw new Error('Pairing package is not valid JSON')}
+  if(!obj||Object.keys(obj).sort().join(',')!=='payload,signature')throw new Error('Invalid pairing envelope');
+  const p=obj.payload;
+  if(!p||typeof p!=='object'||Object.keys(p).sort().join(',')!==[...FIELDS].sort().join(','))throw new Error('Invalid pairing fields');
+  if(p.protocol!==PROTOCOL||!['offer','answer'].includes(p.type))throw new Error('Unsupported pairing protocol');
+  if(typeof p.session!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(p.session))throw new Error('Invalid session ID');
+  if(!Number.isSafeInteger(p.issuedAt)||!Number.isSafeInteger(p.expiresAt)||p.issuedAt>now+30000||p.expiresAt<=now||p.expiresAt-p.issuedAt!==TTL_MS)throw new Error('Expired package or invalid clock window');
+  if(typeof p.from!=='string'||!/^lw-peer-[0-9a-f]{64}$/.test(p.from))throw new Error('Invalid peer ID');
+  if(p.type==='offer'&&(p.to!==null||p.offerHash!==null))throw new Error('Invalid offer binding');
+  if(p.type==='answer'&&(typeof p.to!=='string'||!/^lw-peer-[0-9a-f]{64}$/.test(p.to)||typeof p.offerHash!=='string'||!/^[0-9a-f]{64}$/.test(p.offerHash)))throw new Error('Invalid answer binding');
+  if(typeof p.sdp!=='string'||encode(p.sdp).length>49152||p.sdp.split(/\r?\n/).filter(l=>l.startsWith('m=')).length!==1||!/^m=application /m.test(p.sdp)||!/^a=fingerprint:sha-256 /m.test(p.sdp))throw new Error('Only a single DTLS data-channel SDP is permitted');
+  const keyBytes=fromBase64URL(p.publicKey);
+  if('lw-peer-'+await sha256Hex(keyBytes)!==p.from)throw new Error('Peer key hash mismatch');
+  const key=await crypto.subtle.importKey('spki',keyBytes,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  const signature=fromBase64URL(obj.signature),bytes=encode(canonicalPayload(p));
+  if(signature.length!==64||!await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,signature,bytes))throw new Error('Invalid pairing signature');
+  return {payload:p,hash:await sha256Hex(bytes)};
+}
+export function authorizePairing(verified, expectedPeerId, approved) {
+  if(approved!==true)throw new Error('Explicit session consent required');
+  if(typeof expectedPeerId!=='string'||!/^lw-peer-[0-9a-f]{64}$/.test(expectedPeerId.trim()))throw new Error('Enter the full peer ID obtained from your partner over a trusted channel');
+  if(verified.payload.from!==expectedPeerId.trim())throw new Error('Peer ID does not match your trusted contact');
+  return true;
+}

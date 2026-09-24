@@ -1,0 +1,59 @@
+<!doctype html>
+<!-- LEEWAY HEADER — DO NOT REMOVE
+REGION: UI
+TAG: UI.FEDERATE.PEER.INDEX
+AUTHORITY: LeeWay-Standards
+AUTHORIZED_ROLES: Creator; Agent Lee within approved browser transport scope
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
+5WH:
+WHAT = Manual peer connection proof surface
+WHY = Exercise real browser data transport with explicit peer consent
+WHO = Leeway Industries / Agent Lee System Engineer
+WHERE = peer.html
+WHEN = 2026-09-24
+HOW = Native browser WebRTC and WebCrypto; no hosted signaling or ICE services
+CHAIN: Standards → Integrated → Runtime → Projections
+LICENSE: PROPRIETARY (see LICENSE.md) -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071018"><meta name="referrer" content="no-referrer">
+<title>Peer Connection | LeeWay Federate Web</title>
+<link rel="stylesheet" href="./assets/styles.css"><link rel="stylesheet" href="./assets/peer.css"></head>
+<body>
+<header class="hero peer-hero"><a href="./">← Federate Web</a><p class="eyebrow">C3 · BROWSER TRANSPORT PROOF</p>
+<h1>Connect two peers.<br>Measure the real path.</h1>
+<p class="lede">Encrypted data, signed pairing packages, and explicit consent. No external signaling server, STUN, TURN, microphone, or camera.</p>
+<div class="status-row"><span class="pill" id="connection-state" role="status">INITIALIZING</span><span class="pill proposed">AUTONOMOUS FEDERATION: NOT IMPLEMENTED</span></div></header>
+<main>
+<div id="error" class="panel error" role="alert" hidden></div>
+<section class="panel"><h2>1. Exchange your peer identities</h2>
+<p>Open this page on two devices, or use two independent browser profiles. Share the full peer IDs over a trusted channel. A signature proves possession of a key—not the operator’s identity or LeeWay authority.</p>
+<label for="peer-id">This browser’s signing-key identity</label><textarea id="peer-id" rows="2" readonly aria-label="Your peer identity"></textarea>
+<p id="identity-storage"></p><button id="copy-id" disabled>Copy my peer ID</button>
+<label for="expected-peer">Partner’s full peer ID, received from your trusted contact</label><input id="expected-peer" autocomplete="off" spellcheck="false" placeholder="lw-peer-…">
+</section>
+<section class="grid two">
+<article class="panel"><h2>2. Create or receive a package</h2>
+<p>One participant creates an offer. The other inspects and accepts it, then returns the generated answer. Packages expire after ten minutes and may contain private network candidate addresses: share only with your partner.</p>
+<button id="create-offer" disabled>Create offer</button>
+<label for="incoming">Package received from partner</label><textarea id="incoming" rows="7" spellcheck="false" autocomplete="off"></textarea>
+<button id="inspect" disabled>Inspect package only</button><p id="inspection" role="status">Nothing inspected.</p>
+<label class="consent"><input type="checkbox" id="consent"> I have checked the peer ID and authorize this data-only connection on networks I am permitted to use.</label>
+<button id="accept" disabled>Accept verified peer</button>
+</article>
+<article class="panel"><h2>3. Return the offer or answer</h2>
+<label for="outgoing">Your signed pairing package</label><textarea id="outgoing" rows="12" readonly spellcheck="false"></textarea>
+<button id="copy-package" disabled>Copy package</button><p id="pairing-instructions" role="status">Create an offer, or accept an incoming offer to produce an answer.</p>
+<p><strong>Direct paths only:</strong> without an authorized relay, different NATs, cellular networks, guest Wi-Fi isolation, and firewalls may prevent connection. Failure will remain visible; no public relay is silently selected.</p>
+</article></section>
+<section class="grid two"><article class="panel"><h2>4. Send and verify</h2>
+<label for="message">Text message (up to 4096 UTF-8 bytes)</label><input id="message" autocomplete="off" placeholder="LeeWay peer test">
+<div class="button-row"><button id="send" disabled>Send text</button><button id="ping" disabled>Measure round trip</button><button id="stats" disabled>Read transport stats</button><button id="disconnect" disabled>Disconnect</button></div>
+<p id="round-trip" role="status">No round-trip sample measured.</p><pre id="transport-stats">No active transport.</pre>
+<ul id="messages" aria-live="polite" aria-label="Peer messages"></ul>
+</article><article class="panel"><h2>Execution evidence</h2>
+<p>These are local observations—not canonical Veritas attestations or Learning Ledger entries. Receipt export excludes messages, private keys, and pairing packages.</p>
+<button id="export">Export local receipts</button><pre id="events" aria-live="polite"></pre>
+</article></section>
+<section class="panel"><h2>Boundary of this gate</h2><p>This proves an application data channel, not a VPN, IP router, service deployment, community mesh, or device-control permission. Formula execution and the native Runtime Fabric remain unbound. Closing a tab closes that peer. Reconnection requires a fresh offer/answer exchange.</p></section>
+</main><footer><a href="./">Back to ecosystem</a> · <a href="./docs/PEER-CONNECTION.md">Protocol and test notes</a></footer>
+<script type="module" src="./src/peer.js"></script></body></html>
