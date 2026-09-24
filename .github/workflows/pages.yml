@@ -1,0 +1,42 @@
+# LEEWAY HEADER — DO NOT REMOVE
+# REGION: CORE
+# TAG: CORE.FEDERATE.CI.PAGES
+# AUTHORITY: LeeWay-Standards
+# 5WH: WHAT=GitHub Pages qualification/deployment; WHY=Test before publish; WHO=Leeway Industries; WHERE=.github/workflows/pages.yml; WHEN=2026-09-24; HOW=Node self-test + Pages artifact
+# LICENSE: PROPRIETARY
+name: Federate Web Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/self-test.mjs
+  deploy:
+    needs: test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
