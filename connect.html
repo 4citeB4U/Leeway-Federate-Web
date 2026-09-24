@@ -1,0 +1,73 @@
+<!doctype html>
+<!--
+LEEWAY HEADER — DO NOT REMOVE
+REGION: UI
+TAG: UI.FEDERATE.CONNECT
+AUTHORITY: LeeWay-Standards
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
+5WH:
+WHAT = Plain-language LeeWay device connection experience
+WHY = Hide protocol mechanics from ordinary users while preserving explicit authorization
+WHO = Leeway Industries / Agent Lee System Engineer
+WHERE = connect.html
+WHEN = 2026-09-24
+HOW = Progressive disclosure over the verified WebRTC peer engine
+CHAIN: Standards → Integrated → Runtime → Projections
+LICENSE: PROPRIETARY
+-->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071018"><meta name="description" content="Connect another device to LeeWay">
+<title>Connect a Device | LeeWay</title><link rel="stylesheet" href="./assets/styles.css"><link rel="stylesheet" href="./assets/connect.css"></head>
+<body><header class="connect-header"><a class="back-link" href="./">← LeeWay Network</a><p class="eyebrow">CONNECT A DEVICE</p>
+<h1>Bring another device into LeeWay.</h1><p class="lede">No networking knowledge required. LeeWay handles the connection underneath.</p></header>
+<main class="connect-main">
+<div id="notice" class="notice" role="status" aria-live="polite">This device is ready.</div>
+<div id="error" class="notice error" role="alert" hidden></div>
+<section class="connect-card" aria-labelledby="choice-title" id="choice">
+<h2 id="choice-title">What are you doing?</h2><div class="choice-grid">
+<button class="choice" id="start"><strong>Connect another device</strong><span>Start here on the device already in your hands.</span></button>
+<button class="choice secondary" id="receive"><strong>I received a LeeWay invite</strong><span>Use the invite sent from your other device.</span></button>
+</div></section>
+
+<section class="connect-card step" id="invite-step" hidden aria-labelledby="invite-title">
+<p class="step-number">STEP 1 OF 2</p><h2 id="invite-title">Send the invite to your other device</h2>
+<p>Use Share on your phone, or copy it and send it to yourself privately.</p>
+<div class="button-row"><button id="share-invite">Share invite</button><button class="secondary-button" id="copy-invite">Copy invite</button></div>
+<p class="hint">Keep the invite private. It expires automatically.</p>
+<h3>When the other device sends approval back</h3>
+<label for="approval-input">Paste the approval here</label><textarea id="approval-input" rows="4" autocomplete="off" spellcheck="false" placeholder="Paste the LeeWay approval"></textarea>
+<button id="check-approval">Check approval</button>
+<div id="approval-review" class="review" hidden>
+<p>Both devices should show the same safety code:</p><output id="approval-code" class="safety-code" aria-label="Safety code"></output>
+<label class="confirm"><input id="approval-match" type="checkbox"> The safety code matches the other device.</label>
+<button id="finish" disabled>Finish connection</button></div>
+</section>
+
+<section class="connect-card step" id="receive-step" hidden aria-labelledby="receive-title">
+<p class="step-number">STEP 1 OF 2</p><h2 id="receive-title">Paste the invite from your other device</h2>
+<label for="invite-input">LeeWay invite</label><textarea id="invite-input" rows="4" autocomplete="off" spellcheck="false" placeholder="Paste the LeeWay invite"></textarea>
+<button id="check-invite">Continue</button>
+<div id="invite-review" class="review" hidden>
+<h3>Connection request found</h3><p>LeeWay verified that the invite has not been changed.</p>
+<button id="allow">Allow this connection</button></div>
+<div id="return-approval" class="review" hidden>
+<p class="step-number">STEP 2 OF 2</p><h3>Send this approval back</h3>
+<p>Compare this safety code with the first device before it finishes connecting:</p>
+<output id="invite-code" class="safety-code" aria-label="Safety code"></output>
+<div class="button-row"><button id="share-approval">Share approval</button><button class="secondary-button" id="copy-approval">Copy approval</button></div>
+<p class="hint">Keep this screen open until the other device says Connected.</p></div>
+</section>
+
+<section class="connect-card connected" id="connected" hidden aria-labelledby="connected-title">
+<div class="success-mark" aria-hidden="true">✓</div><h2 id="connected-title">Connected to LeeWay</h2>
+<p>Your two devices now have an encrypted direct data connection.</p>
+<div class="connection-facts"><span>Status</span><strong>Connected</strong><span>Connection</span><strong>Encrypted</strong></div>
+<label for="test-message">Send a quick test</label><div class="message-row"><input id="test-message" value="Hello from LeeWay" maxlength="200"><button id="send-test">Send</button></div>
+<p id="message-status" aria-live="polite"></p><button class="secondary-button" id="disconnect">Disconnect</button>
+</section>
+
+<details class="advanced"><summary>Advanced network diagnostics</summary>
+<p>For developers and troubleshooting only. Normal users do not need these values.</p>
+<dl><dt>Signing identity</dt><dd id="advanced-id">Loading…</dd><dt>Transport state</dt><dd id="advanced-state">Idle</dd><dt>Partner</dt><dd id="advanced-peer">Not connected</dd></dl>
+<p><a href="./peer.html">Open full engineering console</a></p></details>
+</main><footer><a href="./">Back to LeeWay Network</a></footer><script type="module" src="./src/connect.js"></script></body></html>
