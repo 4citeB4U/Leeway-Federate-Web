@@ -1,0 +1,9 @@
+{
+  "name": "LeeWay Federate Web",
+  "short_name": "LW Federate",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#071018",
+  "theme_color": "#071018",
+  "description": "Governed virtual federation control surface for LeeWay"
+}
