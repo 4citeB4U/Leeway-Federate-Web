@@ -2,17 +2,8 @@
 # REGION: CORE
 # TAG: CORE.FEDERATE.CI.PEER_PROOF
 # AUTHORITY: LeeWay-Standards
-# AUTHORIZED_ROLES: Creator; Agent Lee; bounded CI runner
-# DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
-# 5WH:
-# WHAT = Real browser transport qualification
-# WHY = Verify peer execution before publication
-# WHO = Leeway Industries / Agent Lee
-# WHERE = .github/workflows/peer-proof.yml
-# WHEN = 2026-09-24
-# HOW = Node tests plus isolated Chromium contexts; upload actual evidence
-# CHAIN: Standards → Integrated → Runtime → Projections
-# LICENSE: PROPRIETARY (see LICENSE.md)
+# 5WH: WHAT=Peer and human-connection browser qualification; WHY=Prove engine and simple UX before publication; WHO=Leeway Industries; WHERE=.github/workflows/peer-proof.yml; WHEN=2026-09-24; HOW=Pinned Playwright + isolated Chromium
+# LICENSE: PROPRIETARY
 name: Peer transport proof
 on:
   pull_request:
@@ -28,7 +19,7 @@ concurrency:
 jobs:
   browser-proof:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,17 +31,18 @@ jobs:
         run: |
           node tests/self-test.mjs
           node --test tests/peer-core.test.mjs
-      - name: Install pinned browser test tool (not application runtime)
+      - name: Install pinned browser test tool
         run: |
           npm install --prefix "$RUNNER_TEMP/lw-playwright" --no-save --ignore-scripts --package-lock=false playwright@1.63.0
           "$RUNNER_TEMP/lw-playwright/node_modules/.bin/playwright" install --with-deps chromium
-      - name: Real peer proof and independent retest
+      - name: Real peer proof, retest, and human connection proof
         run: |
           mkdir -p test-results
           export LEEWAY_PLAYWRIGHT_PATH="$RUNNER_TEMP/lw-playwright/node_modules/playwright"
           LEEWAY_TEST_RECEIPT=test-results/peer-first.json LEEWAY_SCREENSHOT=test-results/peer-first.png node tests/peer-browser.test.mjs
           LEEWAY_TEST_RECEIPT=test-results/peer-retest.json LEEWAY_SCREENSHOT=test-results/peer-retest.png node tests/peer-browser.test.mjs
-      - name: Preserve actual results, including failure
+          LEEWAY_HUMAN_SCREENSHOT=test-results/human-connect-mobile.png node tests/human-connect.test.mjs
+      - name: Preserve actual results
         if: always()
         uses: actions/upload-artifact@v4
         with:
