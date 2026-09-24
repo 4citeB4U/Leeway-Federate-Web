@@ -1,0 +1,63 @@
+{
+  "leeway_header": {
+    "region": "DATA",
+    "tag": "DATA.FEDERATE.ECOSYSTEM_MANIFEST",
+    "authority": "LeeWay-Standards",
+    "what": "Canonical ecosystem integration map",
+    "why": "Connect Federate Web to existing LeeWay projects without duplicating authority",
+    "who": "Leeway Industries / Agent Lee",
+    "where": "ecosystem.manifest.json",
+    "when": "2026-09-24",
+    "how": "Static integration descriptors",
+    "license": "PROPRIETARY"
+  },
+  "schema": "leeway.federate.ecosystem.v1",
+  "anchors": [
+    {
+      "id": "standards",
+      "repo": "4citeB4U/LeeWay-Standards",
+      "role": "governance-authority",
+      "pages": "https://4citeb4u.github.io/LeeWay-Standards/",
+      "pages_repository_state": "has_pages=true"
+    },
+    {
+      "id": "runtime",
+      "repo": "4citeB4U/Leeway-Runtime-Fabric",
+      "role": "private-runtime-authority",
+      "visibility": "private"
+    },
+    {
+      "id": "formula",
+      "repo": "4citeB4U/Leeway-formula-live",
+      "role": "formula-source-evidence",
+      "pages_repository_state": "has_pages=false"
+    },
+    {
+      "id": "skills",
+      "repo": "4citeB4U/LeeWay-Agent-Skills",
+      "role": "capability-authority",
+      "pages": "https://4citeb4u.github.io/LeeWay-Agent-Skills/",
+      "pages_repository_state": "has_pages=true"
+    },
+    {
+      "id": "device",
+      "repo": "4citeB4U/LEEWAY-DEVICE-BRIDGE",
+      "role": "device-execution-bridge",
+      "pages": "https://4citeb4u.github.io/LEEWAY-DEVICE-BRIDGE/",
+      "pages_repository_state": "has_pages=true"
+    },
+    {
+      "id": "library",
+      "repo": "4citeB4U/leolasliabrary",
+      "role": "application-surface",
+      "public_app": "https://leolasliabrary.vercel.app",
+      "pages_repository_state": "has_pages=true"
+    },
+    {
+      "id": "ecosystem",
+      "repo": "4citeB4U/leeway-ecosystem",
+      "role": "public-ecosystem-index",
+      "pages_repository_state": "has_pages=false"
+    }
+  ]
+}
