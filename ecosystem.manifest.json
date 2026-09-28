@@ -18,8 +18,9 @@
     "path": "standards/leeway-ecosystem-authority.v1.json",
     "rawUrl": "https://raw.githubusercontent.com/4citeB4U/LeeWay-Standards/main/standards/leeway-ecosystem-authority.v1.json",
     "registryId": "LEEWAY_ECOSYSTEM_AUTHORITY_V1",
-    "sourceMergeCommit": "882ce7a15e030be779e3e07018871e603d727a02",
-    "sourceBlobSha": "e8114ec76fb6f670c72f3e5893e28531276d53dd"
+    "sourceMergeCommit": "b37e689979964bddcd915ccb1759a869bc029cdc",
+    "sourceBlobSha": "aa58d8c87096ac77e46eca2c5aa90962d3a8b66d",
+    "convergenceCheckpoint": "LEEWAY_ECOSYSTEM_CONVERGENCE_20260928_GATES_A_C"
   },
   "projection": {
     "liveDiscovery": "src/config/ecosystem.js",
