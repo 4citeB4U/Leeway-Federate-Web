@@ -18,8 +18,8 @@
     "path": "standards/leeway-ecosystem-authority.v1.json",
     "rawUrl": "https://raw.githubusercontent.com/4citeB4U/LeeWay-Standards/main/standards/leeway-ecosystem-authority.v1.json",
     "registryId": "LEEWAY_ECOSYSTEM_AUTHORITY_V1",
-    "sourceMergeCommit": "6a9391438d0cba7fac0da425c02b53c7a6457885",
-    "sourceBlobSha": "1433d0204e5d4f30bb06f2e46d0a9f0c523f29e4"
+    "sourceMergeCommit": "882ce7a15e030be779e3e07018871e603d727a02",
+    "sourceBlobSha": "e8114ec76fb6f670c72f3e5893e28531276d53dd"
   },
   "projection": {
     "liveDiscovery": "src/config/ecosystem.js",
@@ -28,7 +28,8 @@
     "excludesAuthorityClasses": [
       "EVIDENCE_ONLY"
     ],
-    "truthLaw": "Pages discovery is not runtime execution proof."
+    "truthLaw": "Pages discovery is not runtime execution proof.",
+    "selfRevisionPolicy": "FEDERATE_WEB_COMMIT_RESOLVED_AT_VERIFICATION"
   },
   "intendedGovernedPath": "Federate Web -> Veritas pre-gate -> canonical Runtime Fabric adapter -> approved capability / Device Bridge / skill -> execution -> Veritas post-gate -> receipt"
 }

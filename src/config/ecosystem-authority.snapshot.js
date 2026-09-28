@@ -14,8 +14,8 @@ export const SNAPSHOT_META={
   "registryId": "LEEWAY_ECOSYSTEM_AUTHORITY_V1",
   "sourceRepo": "4citeB4U/LeeWay-Standards",
   "sourcePath": "standards/leeway-ecosystem-authority.v1.json",
-  "sourceMergeCommit": "6a9391438d0cba7fac0da425c02b53c7a6457885",
-  "sourceBlobSha": "1433d0204e5d4f30bb06f2e46d0a9f0c523f29e4"
+  "sourceMergeCommit": "882ce7a15e030be779e3e07018871e603d727a02",
+  "sourceBlobSha": "e8114ec76fb6f670c72f3e5893e28531276d53dd"
 };
 export const ECOSYSTEM_SNAPSHOT=[
   {
@@ -87,7 +87,7 @@ export const ECOSYSTEM_SNAPSHOT=[
     "repoFullName": "4citeB4U/Leeway-Federate-Web",
     "pages": "https://4citeb4u.github.io/Leeway-Federate-Web/",
     "visibility": "public",
-    "approvedCommit": "c40712136c31c4b61cb5d192cb86f6d7f6baeaf1",
+    "approvedCommit": null,
     "state": "WEB_SURFACE_DECLARED_NOT_RUNTIME_PROOF"
   },
   {
@@ -111,7 +111,7 @@ export const ECOSYSTEM_SNAPSHOT=[
     "repoFullName": "4citeB4U/leeway-ecosystemv2.14",
     "pages": null,
     "visibility": "public",
-    "approvedCommit": "224b524162a69488f8fbce8c5047c5e231c76da5",
+    "approvedCommit": "7707df5e91911c59db0ab54e6f2bf78578fcc494",
     "state": "REPOSITORY_AUTHORITY"
   },
   {

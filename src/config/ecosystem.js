@@ -33,7 +33,7 @@ export function projectAuthorities(registry){
     repoFullName:a.repo,
     pages:a.pages||null,
     visibility:a.visibility,
-    approvedCommit:a.approvedCommit||null,
+    approvedCommit:a.id==="federate-web"?null:(a.approvedCommit||null),
     state:stateFor(a)
   }));
 }
