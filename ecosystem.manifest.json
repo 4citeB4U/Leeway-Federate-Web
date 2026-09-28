@@ -3,61 +3,32 @@
     "region": "DATA",
     "tag": "DATA.FEDERATE.ECOSYSTEM_MANIFEST",
     "authority": "LeeWay-Standards",
-    "what": "Canonical ecosystem integration map",
-    "why": "Connect Federate Web to existing LeeWay projects without duplicating authority",
+    "what": "Federate Web projection contract for the canonical Standards ecosystem registry",
+    "why": "Prevent duplicate authority catalogs while keeping GitHub Pages discovery resilient",
     "who": "Leeway Industries / Agent Lee",
     "where": "ecosystem.manifest.json",
-    "when": "2026-09-24",
-    "how": "Static integration descriptors",
+    "when": "2026-09-28",
+    "how": "Live Standards registry discovery plus generated fail-safe snapshot",
     "license": "PROPRIETARY"
   },
-  "schema": "leeway.federate.ecosystem.v1",
-  "anchors": [
-    {
-      "id": "standards",
-      "repo": "4citeB4U/LeeWay-Standards",
-      "role": "governance-authority",
-      "pages": "https://4citeb4u.github.io/LeeWay-Standards/",
-      "pages_repository_state": "has_pages=true"
-    },
-    {
-      "id": "runtime",
-      "repo": "4citeB4U/Leeway-Runtime-Fabric",
-      "role": "private-runtime-authority",
-      "visibility": "private"
-    },
-    {
-      "id": "formula",
-      "repo": "4citeB4U/Leeway-formula-live",
-      "role": "formula-source-evidence",
-      "pages_repository_state": "has_pages=false"
-    },
-    {
-      "id": "skills",
-      "repo": "4citeB4U/LeeWay-Agent-Skills",
-      "role": "capability-authority",
-      "pages": "https://4citeb4u.github.io/LeeWay-Agent-Skills/",
-      "pages_repository_state": "has_pages=true"
-    },
-    {
-      "id": "device",
-      "repo": "4citeB4U/LEEWAY-DEVICE-BRIDGE",
-      "role": "device-execution-bridge",
-      "pages": "https://4citeb4u.github.io/LEEWAY-DEVICE-BRIDGE/",
-      "pages_repository_state": "has_pages=true"
-    },
-    {
-      "id": "library",
-      "repo": "4citeB4U/leolasliabrary",
-      "role": "application-surface",
-      "public_app": "https://leolasliabrary.vercel.app",
-      "pages_repository_state": "has_pages=true"
-    },
-    {
-      "id": "ecosystem",
-      "repo": "4citeB4U/leeway-ecosystem",
-      "role": "public-ecosystem-index",
-      "pages_repository_state": "has_pages=false"
-    }
-  ]
+  "schema": "leeway.federate.ecosystem.v2",
+  "authorityRegistry": {
+    "repo": "4citeB4U/LeeWay-Standards",
+    "branch": "main",
+    "path": "standards/leeway-ecosystem-authority.v1.json",
+    "rawUrl": "https://raw.githubusercontent.com/4citeB4U/LeeWay-Standards/main/standards/leeway-ecosystem-authority.v1.json",
+    "registryId": "LEEWAY_ECOSYSTEM_AUTHORITY_V1",
+    "sourceMergeCommit": "6a9391438d0cba7fac0da425c02b53c7a6457885",
+    "sourceBlobSha": "1433d0204e5d4f30bb06f2e46d0a9f0c523f29e4"
+  },
+  "projection": {
+    "liveDiscovery": "src/config/ecosystem.js",
+    "fallbackSnapshot": "src/config/ecosystem-authority.snapshot.js",
+    "verifier": "scripts/verify-ecosystem-authority-sync.mjs",
+    "excludesAuthorityClasses": [
+      "EVIDENCE_ONLY"
+    ],
+    "truthLaw": "Pages discovery is not runtime execution proof."
+  },
+  "intendedGovernedPath": "Federate Web -> Veritas pre-gate -> canonical Runtime Fabric adapter -> approved capability / Device Bridge / skill -> execution -> Veritas post-gate -> receipt"
 }

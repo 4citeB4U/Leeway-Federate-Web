@@ -2,19 +2,20 @@
 # REGION: CORE
 # TAG: CORE.FEDERATE.CI.PAGES
 # AUTHORITY: LeeWay-Standards
-# 5WH: WHAT=GitHub Pages qualification/deployment; WHY=Test before publish; WHO=Leeway Industries; WHERE=.github/workflows/pages.yml; WHEN=2026-09-24; HOW=Node self-test + Pages artifact
+# 5WH: WHAT=GitHub Pages qualification/deployment; WHY=Test authority projection before publish; WHO=Leeway Industries; WHERE=.github/workflows/pages.yml; WHEN=2026-09-28; HOW=Node self-test + Standards registry sync proof + Pages artifact
 # LICENSE: PROPRIETARY
 name: Federate Web Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   test:
@@ -25,7 +26,9 @@ jobs:
         with:
           node-version: 22
       - run: node tests/self-test.mjs
+      - run: node scripts/verify-ecosystem-authority-sync.mjs
   deploy:
+    if: github.event_name != 'pull_request'
     needs: test
     environment:
       name: github-pages
