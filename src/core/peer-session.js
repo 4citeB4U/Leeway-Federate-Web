@@ -32,7 +32,7 @@ export class PeerSession {
     pc.onconnectionstatechange=()=>{
       if(this.pc!==pc)return;
       if(['disconnected','failed','closed'].includes(pc.connectionState)){
-        this.state=pc.connectionState.toUpperCase();this.emit('TRANSPORT_STATE',{connectionState:pc.connectionState});
+        this.state=pc.connectionState.toUpperCase();this.emit('TRANSPORT_STATE',{connectionState:pc.connectionState});this.close('transport-'+pc.connectionState);
       }
     };
     pc.oniceconnectionstatechange=()=>{if(this.pc===pc)this.emit('ICE_STATE',{iceState:pc.iceConnectionState});};
@@ -45,8 +45,8 @@ export class PeerSession {
       if(this.pc!==pc)return;
       this.state='CONNECTED';this.emit('CHANNEL_OPEN',{transport:'WebRTC SCTP/DTLS',authorization:'manual-peer-pin-and-consent',formulaExecuted:false});
     };
-    channel.onclose=()=>{if(this.pc===pc){this.state='CLOSED';this.cancelPing('Channel closed');this.emit('CHANNEL_CLOSED');}};
-    channel.onerror=()=>{if(this.pc===pc){this.state='FAILED';this.emit('CHANNEL_ERROR');}};
+    channel.onclose=()=>{if(this.pc===pc){this.state='CLOSED';this.emit('CHANNEL_CLOSED');this.close('channel-closed');}};
+    channel.onerror=()=>{if(this.pc===pc){this.state='FAILED';this.emit('CHANNEL_ERROR');this.close('channel-error');}};
     channel.onmessage=e=>{if(this.pc!==pc)return;try{this.receive(e.data)}catch(error){this.emit('FRAME_REJECTED',{reason:error.message});this.close('protocol-error');}};
   }
   async gather() {
