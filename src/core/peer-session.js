@@ -35,7 +35,7 @@ export class PeerSession {
       try{current.push(hash);localStorage.setItem(USED_OFFERS_KEY,JSON.stringify(current))}catch{throw new Error('Replay reservation storage unavailable')}
       this.usedOffers=new Set(current);
     };
-    if(typeof localStorage==='undefined'){commit();return;}
+    if(typeof localStorage==='undefined')throw new Error('Replay reservation storage unavailable; cross-tab coordination is required');
     if(!globalThis.navigator?.locks?.request)throw new Error('Cross-tab replay coordination unavailable');
     await navigator.locks.request(USED_OFFERS_KEY,{mode:'exclusive'},commit);
   }

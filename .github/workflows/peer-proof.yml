@@ -33,6 +33,7 @@ jobs:
           node --test tests/peer-core.test.mjs
           node tests/replay-persistence.test.mjs
           node tests/replay-concurrency.test.mjs
+          node tests/replay-unavailable.test.mjs
           node tests/service-worker-upgrade.test.mjs
       - name: Install pinned browser test tool
         run: |

@@ -9,22 +9,9 @@ const CACHE='leeway-federate-web-v4-reviewed-pairing';
 const SHELL=['./','./index.html','./connect.html','./peer.html','./assets/styles.css','./assets/connect.css','./assets/peer.css','./src/main.js','./src/service-worker-client.js','./src/connect.js','./src/peer.js','./src/core/identity.js','./src/core/pairing.js','./src/core/peer-session.js','./src/core/path-score.js','./src/core/receipts.js','./src/config/ecosystem.js','./bootstrap.json','./ecosystem.manifest.json'];
 const scope=new URL(self.registration.scope);
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting())));
-const currentClient=client=>new Promise(resolve=>{
-  let finished=false;
-  const finish=current=>{if(finished)return;finished=true;resolve(current)};
-  try{
-    const channel=new MessageChannel();
-    channel.port1.onmessage=event=>finish(event.data?.build===CACHE);
-    client.postMessage({type:'LEEWAY_CHECK_CLIENT',build:CACHE},[channel.port2]);
-    setTimeout(()=>finish(false),250);
-  }catch{finish(false)}
-});
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   for(const name of await caches.keys())if(name.startsWith('leeway-federate-web-')&&name!==CACHE)await caches.delete(name);
-  const open=await self.clients.matchAll({type:'window',includeUncontrolled:true});
   await self.clients.claim();
-  const current=await Promise.all(open.map(currentClient));
-  for(let i=0;i<open.length;i++)if(!current[i])open[i].navigate(open[i].url).catch(()=>null);
 })()));
 self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
