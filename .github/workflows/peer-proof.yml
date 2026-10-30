@@ -31,6 +31,7 @@ jobs:
         run: |
           node tests/self-test.mjs
           node --test tests/peer-core.test.mjs
+          node tests/replay-persistence.test.mjs
       - name: Install pinned browser test tool
         run: |
           npm install --prefix "$RUNNER_TEMP/lw-playwright" --no-save --ignore-scripts --package-lock=false playwright@1.63.0
@@ -42,6 +43,7 @@ jobs:
           LEEWAY_TEST_RECEIPT=test-results/peer-first.json LEEWAY_SCREENSHOT=test-results/peer-first.png node tests/peer-browser.test.mjs
           LEEWAY_TEST_RECEIPT=test-results/peer-retest.json LEEWAY_SCREENSHOT=test-results/peer-retest.png node tests/peer-browser.test.mjs
           LEEWAY_HUMAN_SCREENSHOT=test-results/human-connect-mobile.png node tests/human-connect.test.mjs
+          node tests/human-connect-negative.test.mjs
       - name: Preserve actual results
         if: always()
         uses: actions/upload-artifact@v4

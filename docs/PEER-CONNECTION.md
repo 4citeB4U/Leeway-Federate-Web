@@ -37,7 +37,7 @@ Offer/answer payloads bind the session ID, type, origin peer, recipient (answer)
 
 A self-signature proves key possession, **not** real-world identity, domain ownership, or LeeWay Root-of-Trust authorization. Checking a key copied only from an untrusted package is insufficient. Same-origin malicious JavaScript can use stored signing keys even if they are non-extractable. Different GitHub Pages project paths under the same account share an origin; a dedicated origin remains a production hardening gate.
 
-Replay rejection covers consumed offers during a page lifetime. Answer binding requires a current pending offer. This is not a network-wide or durable revocation/anti-replay system. There is no bootstrap root-key pin or native Runtime Fabric authorization in this probe.
+Replay rejection reserves consumed offer hashes in bounded browser-local storage and restores them on reloads/tabs when storage is available; in-memory rejection remains the fallback for non-persistent runtimes. This is not a network-wide or durable revocation/anti-replay system. There is no bootstrap root-key pin or native Runtime Fabric authorization in this probe.
 
 ## Data and evidence boundaries
 

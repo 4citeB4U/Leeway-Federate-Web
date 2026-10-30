@@ -19,11 +19,13 @@ LICENSE: PROPRIETARY (see LICENSE.md)
 import {signPairing,inspectPairing,authorizePairing} from './pairing.js';
 const byteLength=s=>new TextEncoder().encode(s).length;
 const LABEL='leeway-data-v1';
+const USED_OFFERS_KEY='leeway-federate-used-offers-v1';
 export class PeerSession {
   constructor(identity,onEvent=()=>{}) {
-    this.identity=identity;this.onEvent=onEvent;this.usedOffers=new Set();this.pc=null;this.channel=null;
+    this.identity=identity;this.onEvent=onEvent;this.usedOffers=new Set();try{if(typeof localStorage!=='undefined'){const saved=JSON.parse(localStorage.getItem(USED_OFFERS_KEY)||'[]');if(Array.isArray(saved))for(const hash of saved.slice(-100))if(/^[0-9a-f]{64}$/.test(hash))this.usedOffers.add(hash)}}catch{}this.pc=null;this.channel=null;
     this.state='IDLE';this.session=null;this.remoteId=null;this.pendingPing=null;this.bytesSent=0;this.bytesReceived=0;this.samples=[];
   }
+  reserveOffer(hash){this.usedOffers.add(hash);if(this.usedOffers.size>100)this.usedOffers.delete(this.usedOffers.values().next().value);if(typeof localStorage!=='undefined')try{localStorage.setItem(USED_OFFERS_KEY,JSON.stringify([...this.usedOffers]))}catch{this.usedOffers.delete(hash);throw new Error('Replay reservation storage unavailable')}}
   emit(event,detail={}) { this.onEvent({event,at:new Date().toISOString(),state:this.state,session:this.session,remoteId:this.remoteId,...detail}); }
   begin(session) {
     this.close('replaced');this.session=session;this.remoteId=null;this.offerHash=null;this.bytesSent=0;this.bytesReceived=0;this.samples=[];
@@ -77,13 +79,13 @@ export class PeerSession {
       try {
         await this.pc.setRemoteDescription({type:'offer',sdp:p.sdp});await this.pc.setLocalDescription(await this.pc.createAnswer());await this.gather();
         const result=await signPairing(this.identity,{type:'answer',session:p.session,to:p.from,offerHash:verified.hash,sdp:this.pc.localDescription.sdp});
-        this.usedOffers.add(verified.hash);if(this.usedOffers.size>100)this.usedOffers.delete(this.usedOffers.values().next().value);
+        this.reserveOffer(verified.hash);
         this.state='ANSWER_READY';this.emit('OFFER_ACCEPTED');return result.text;
       }catch(error){this.close('answer-failed');throw error;}
     }
     if(!this.pc||this.state!=='OFFER_READY'||p.to!==this.identity.id||p.session!==this.session||p.offerHash!==this.offerHash)throw new Error('Answer does not belong to this pending offer');
     this.remoteId=p.from;
-    await this.pc.setRemoteDescription({type:'answer',sdp:p.sdp});this.state='CONNECTING';this.emit('ANSWER_ACCEPTED');return null;
+    try{await this.pc.setRemoteDescription({type:'answer',sdp:p.sdp});this.state='CONNECTING';this.emit('ANSWER_ACCEPTED');return null}catch(error){this.close('answer-failed');throw error}
   }
   sendFrame(frame) {
     if(this.state!=='CONNECTED'||this.channel?.readyState!=='open')throw new Error('No authorized open data channel');
