@@ -45,7 +45,7 @@ LICENSE: PROPRIETARY
 
 <section class="connect-card step" id="receive-step" hidden aria-labelledby="receive-title">
 <p class="step-number">STEP 1 OF 2</p><h2 id="receive-title">Paste the invite from your other device</h2>
-<label for="invite-input">LeeWay invite</label><textarea id="invite-input" rows="4" autocomplete="off" spellcheck="false" placeholder="Paste the LeeWay invite"></textarea>
+<label for="trusted-peer">Trusted sending device ID (copy from the other device over a separate trusted channel)</label><input id="trusted-peer" autocomplete="off" spellcheck="false" placeholder="lw-peer-…" required><p class="hint">The signed invite alone does not establish who sent it. Confirm the full ID independently before allowing a connection.</p><label for="invite-input">LeeWay invite</label><textarea id="invite-input" rows="4" autocomplete="off" spellcheck="false" placeholder="Paste the LeeWay invite"></textarea>
 <button id="check-invite">Continue</button>
 <div id="invite-review" class="review" hidden>
 <h3>Connection request found</h3><p>LeeWay verified that the invite has not been changed.</p>
