@@ -43,6 +43,7 @@ jobs:
         run: |
           mkdir -p test-results
           export LEEWAY_PLAYWRIGHT_PATH="$RUNNER_TEMP/lw-playwright/node_modules/playwright"
+          node tests/service-worker-upgrade-browser.test.mjs
           LEEWAY_TEST_RECEIPT=test-results/peer-first.json LEEWAY_SCREENSHOT=test-results/peer-first.png node tests/peer-browser.test.mjs
           LEEWAY_TEST_RECEIPT=test-results/peer-retest.json LEEWAY_SCREENSHOT=test-results/peer-retest.png node tests/peer-browser.test.mjs
           LEEWAY_HUMAN_SCREENSHOT=test-results/human-connect-mobile.png node tests/human-connect.test.mjs
