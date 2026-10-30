@@ -11,7 +11,7 @@ import{getPeerIdentity}from'./core/identity.js';import{inspectPairing,safetyCode
 const $=id=>document.getElementById(id);let identity,peer,outgoing='',verified=null,reviewedText='',busy=false;
 function show(id){$(id).hidden=false}function hide(id){$(id).hidden=true}
 function notice(text){$('notice').textContent=text;$('error').hidden=true}function fail(e){$('error').textContent=e.message||String(e);show('error')}
-function state(){if(!peer)return;if(!$('connected').hidden&&peer.state!=='CONNECTED'){hide('connected');show('choice');notice('Connection ended. Start a fresh invite to reconnect.');}$('advanced-state').textContent=peer.state;$('advanced-peer').textContent=peer.remoteId||'Not connected';if(peer.state==='CONNECTED'){hide('choice');hide('invite-step');hide('receive-step');show('connected');notice('Connection complete.');}}
+function state(){if(!peer)return;const ended=['DISCONNECTED','FAILED','CLOSED'].includes(peer.state);if(ended){hide('connected');hide('invite-step');hide('receive-step');show('choice');notice('Connection ended. Start a fresh invite to reconnect.');}$('advanced-state').textContent=peer.state;$('advanced-peer').textContent=peer.remoteId||'Not connected';if(peer.state==='CONNECTED'){hide('choice');hide('invite-step');hide('receive-step');show('connected');notice('Connection complete.');}}
 async function act(fn){if(busy)return;busy=true;try{await fn()}catch(e){fail(e)}finally{busy=false;state()}}
 async function copy(text,label){await navigator.clipboard.writeText(text);notice(label+' copied.');}
 async function share(text,title){if(navigator.share){try{await navigator.share({title,text});notice(title+' shared.');return}catch(e){if(e.name==='AbortError')return}}await copy(text,title)}

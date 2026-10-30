@@ -24,4 +24,4 @@ $("#run-lab").addEventListener("click",runLab);
 $("#export-receipts").addEventListener("click",exportReceipts);
 renderNode();
 renderEcosystem().then(renderReceipts).catch(()=>renderReceipts());
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+if("serviceWorker"in navigator){let reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded)return;reloaded=true;window.location.reload()});navigator.serviceWorker.register("./service-worker.js").catch(()=>{})}
