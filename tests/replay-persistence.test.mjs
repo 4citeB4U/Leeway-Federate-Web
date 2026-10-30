@@ -13,11 +13,14 @@ globalThis.localStorage = {
   getItem: key => values.get(key) ?? null,
   setItem: (key, value) => values.set(key, String(value))
 };
+Object.defineProperty(globalThis, "navigator", {configurable: true, value: {
+  locks: {request: async (_name, _options, callback) => callback()}
+}});
 
 const identity = {id: "lw-peer-" + "1".repeat(64)};
 const hash = "a".repeat(64);
 const first = new PeerSession(identity);
-first.reserveOffer(hash);
+await first.reserveOffer(hash);
 const second = new PeerSession(identity);
 assert.equal(second.usedOffers.has(hash), true);
 assert.equal(JSON.parse(values.get("leeway-federate-used-offers-v1")).length, 1);

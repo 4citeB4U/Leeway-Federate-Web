@@ -20,12 +20,25 @@ import {signPairing,inspectPairing,authorizePairing} from './pairing.js';
 const byteLength=s=>new TextEncoder().encode(s).length;
 const LABEL='leeway-data-v1';
 const USED_OFFERS_KEY='leeway-federate-used-offers-v1';
+const MAX_USED_OFFERS=100;
 export class PeerSession {
   constructor(identity,onEvent=()=>{}) {
     this.identity=identity;this.onEvent=onEvent;this.usedOffers=new Set();try{if(typeof localStorage!=='undefined'){const saved=JSON.parse(localStorage.getItem(USED_OFFERS_KEY)||'[]');if(Array.isArray(saved))for(const hash of saved.slice(-100))if(/^[0-9a-f]{64}$/.test(hash))this.usedOffers.add(hash)}}catch{}this.pc=null;this.channel=null;
     this.state='IDLE';this.session=null;this.remoteId=null;this.pendingPing=null;this.bytesSent=0;this.bytesReceived=0;this.samples=[];
   }
-  reserveOffer(hash){this.usedOffers.add(hash);if(this.usedOffers.size>100)this.usedOffers.delete(this.usedOffers.values().next().value);if(typeof localStorage!=='undefined')try{localStorage.setItem(USED_OFFERS_KEY,JSON.stringify([...this.usedOffers]))}catch{this.usedOffers.delete(hash);throw new Error('Replay reservation storage unavailable')}}
+  async reserveOffer(hash){
+    const commit=()=>{
+      if(typeof localStorage==='undefined'){if(this.usedOffers.has(hash))throw new Error('Offer already consumed; request a fresh offer');this.usedOffers.add(hash);return;}
+      let current=[];try{const saved=JSON.parse(localStorage.getItem(USED_OFFERS_KEY)||'[]');if(Array.isArray(saved))current=saved.filter(value=>/^[0-9a-f]{64}$/.test(value)).slice(-MAX_USED_OFFERS)}catch{throw new Error('Replay reservation storage unavailable')}
+      if(current.includes(hash)||this.usedOffers.has(hash))throw new Error('Offer already consumed; request a fresh offer');
+      if(current.length>=MAX_USED_OFFERS)throw new Error('Replay reservation capacity reached; request a fresh offer later');
+      try{current.push(hash);localStorage.setItem(USED_OFFERS_KEY,JSON.stringify(current))}catch{throw new Error('Replay reservation storage unavailable')}
+      this.usedOffers=new Set(current);
+    };
+    if(typeof localStorage==='undefined'){commit();return;}
+    if(!globalThis.navigator?.locks?.request)throw new Error('Cross-tab replay coordination unavailable');
+    await navigator.locks.request(USED_OFFERS_KEY,{mode:'exclusive'},commit);
+  }
   emit(event,detail={}) { this.onEvent({event,at:new Date().toISOString(),state:this.state,session:this.session,remoteId:this.remoteId,...detail}); }
   begin(session) {
     this.close('replaced');this.session=session;this.remoteId=null;this.offerHash=null;this.bytesSent=0;this.bytesReceived=0;this.samples=[];
@@ -75,11 +88,11 @@ export class PeerSession {
     if(p.from===this.identity.id)throw new Error('Self-pairing is blocked; use a separate browser profile or another device');
     if(p.type==='offer') {
       if(this.usedOffers.has(verified.hash))throw new Error('Offer already consumed; request a fresh offer');
+      await this.reserveOffer(verified.hash);
       this.begin(p.session);this.remoteId=p.from;this.offerHash=verified.hash;
       try {
         await this.pc.setRemoteDescription({type:'offer',sdp:p.sdp});await this.pc.setLocalDescription(await this.pc.createAnswer());await this.gather();
         const result=await signPairing(this.identity,{type:'answer',session:p.session,to:p.from,offerHash:verified.hash,sdp:this.pc.localDescription.sdp});
-        this.reserveOffer(verified.hash);
         this.state='ANSWER_READY';this.emit('OFFER_ACCEPTED');return result.text;
       }catch(error){this.close('answer-failed');throw error;}
     }
