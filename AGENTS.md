@@ -1,5 +1,6 @@
 <!--
 LEEWAY HEADER — DO NOT REMOVE
+DISCOVERY_PIPELINE: Voice → Intent → Location → Vertical → Ranking → Render
 REGION: LEEWAY.REPOSITORY.WORKER.ADMISSION
 TAG: LEEWAY.ECOSYSTEM.WORKER.ADMISSION.V1
 5WH:
@@ -9,7 +10,7 @@ WHO = Creator/Human Authority and this repository's qualified source owner.
 WHERE = AGENTS.md in 4citeB4U/Leeway-Federate-Web.
 WHEN = 2026-11-12.
 HOW = Read canonical governing sources and original mission, enforce authorized work and accurate evidence using existing system components.
-LICENSE = Existing repository terms; new license not asserted.
+LICENSE: Existing repository terms; new license not asserted.
 -->
 # LeeWay Repository — Mandatory Agent/Worker Admission
 
@@ -24,3 +25,7 @@ LICENSE = Existing repository terms; new license not asserted.
 6. Preserve device-owned Digital Brain and Diagnostics on their host. Protect secrets and private hardware evidence. Maintain Gate 0 expressive precision and professional response behavior with authentic source and tool proof. An external helper never becomes Agent Lee.
 
 **Release:** SOURCE_IMPLEMENTED / TESTED / CI_PASS / DEPLOYED / LIVE_OBSERVED / VERITAS_VERIFIED / QUALIFIED are separate. No source file or model response proves the client loaded this rule; integration tests and authorized runtime ingress enforcement remain required.
+
+## Final boundary — effective canonical law and work custody
+
+[Approved LeeWay Standards main](https://github.com/4citeB4U/LeeWay-Standards/commit/2e5e98bdc49cfe0bf180de394db054eaf2f8e3d3) supersedes historical pending PR #71 references. Final handoff requires mission/work/source, scope/grants, evidence FOR/AGAINST, measurements, decisions, corrections, learner practice and next owner/gate. No source or test result self-confers production authority.
