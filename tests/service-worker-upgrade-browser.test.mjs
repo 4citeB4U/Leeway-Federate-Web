@@ -74,6 +74,13 @@ try {
   assert.equal(v4Requested, true);
   assert.equal(await activeVersion(), 3);
   assert.equal(navigations, 2);
+  // Wait for the replacement worker to finish installation.
+  // Closing the legacy page before this point races activation.
+  await page.waitForFunction(async () => {
+    const registration =
+      await navigator.serviceWorker.getRegistration();
+    return registration?.waiting?.state === 'installed';
+  });
   await page.close();
   const next = await context.newPage();
   await next.goto(base + "/connect.html");
